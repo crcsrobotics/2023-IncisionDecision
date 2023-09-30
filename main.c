@@ -23,16 +23,16 @@ task main()
 
 
 			}
-			if(vexRT[Btn6D]){
+			else if(vexRT[Btn6D]){
 				motor[forkliftMotor]=-127;
 
-			}
+			}else{ motor[forkliftMotor]=0;}
 			if(vexRT[Btn5U]){
 				motor[autobox]=127;
 			}
-			if(vexRT[Btn5D]){
+			else if(vexRT[Btn5D]){
 				motor[autobox]=-127;
-			}
+			}else{motor[autobox]=0;}
 			if(vexRT[Btn8D]){
 				if(lastpress8D==false){
 					if(clawopen){
