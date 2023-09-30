@@ -8,23 +8,43 @@
 
 task main()
 {bool autonomous = false;
-while (true){
-	if (autonomous){
+	bool lastpress8D = false;
+	bool clawopen = true;
+	while (true){
+		if (autonomous){
 
 
-}
-else{
-	motor[motorLeft]=vexRT[Ch3];
-	motor[motorRight]=vexRT[Ch2];
-	if(vexRT[Btn6U]){
-	motor[forkliftMotor]=127;
+		}
+		else{
+			motor[motorLeft]=vexRT[Ch3];
+			motor[motorRight]=vexRT[Ch2];
+			if(vexRT[Btn6U]){
+				motor[forkliftMotor]=127;
 
 
-}
-	if(vexRT[Btn6D]){
-	motor[forkliftMotor]=-127;
+			}
+			if(vexRT[Btn6D]){
+				motor[forkliftMotor]=-127;
 
-}
-}
-}
+			}
+			if(vexRT[Btn5U]){
+				motor[autobox]=127;
+			}
+			if(vexRT[Btn5D]){
+				motor[autobox]=-127;
+			}
+			if(vexRT[Btn8D]){
+				if(lastpress8D==false){
+					if(clawopen){
+						motor[claw]=127;
+					}
+					else{ motor[claw]=-127;}
+				}
+				lastpress8D=true;
+			}
+			else{ lastpress8D=false;
+			}
+
+		}
+	}
 }
