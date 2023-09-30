@@ -10,12 +10,14 @@ task main()
 {bool autonomous = false;
 	bool lastpress8D = false;
 	bool clawopen = true;
+	motor[sizeChange]=127;
 	while (true){
 		if (autonomous){
 
 
 		}
 		else{
+			if(vexRT[Btn8L]){motor[sizeChange]=-127;}
 			motor[motorLeft]=vexRT[Ch3];
 			motor[motorRight]=vexRT[Ch2];
 			if(vexRT[Btn6U]){
