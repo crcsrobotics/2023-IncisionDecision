@@ -1,5 +1,5 @@
 #pragma config(Motor,  port2,           motorLeft,     tmotorServoContinuousRotation, openLoop)
-#pragma config(Motor,  port4,           sizeChange,    tmotorNone, openLoop)
+#pragma config(Motor,  port4,           sizeChange,    tmotorServoStandard, openLoop)
 #pragma config(Motor,  port5,           autobox,       tmotorServoContinuousRotation, openLoop)
 #pragma config(Motor,  port6,           forkliftMotor, tmotorServoContinuousRotation, openLoop)
 #pragma config(Motor,  port7,           claw,          tmotorServoStandard, openLoop)
@@ -9,7 +9,7 @@
 task main(){
 	bool autonomous = false;
 	bool lastpress8D = false;
-	bool clawopen = true;
+	bool clawOpen = true;
 
 	// Move servo to fit in competition dimensions
 	motor[sizeChange]=127;
@@ -59,11 +59,13 @@ task main(){
 				if(lastpress8D==false){
 					// Triggers once on button press
 					// If claw is open, close it. If claw is close, open it.
-					if(clawopen){
+					if(clawOpen){
 						motor[claw]=127;
+						clawOpen = false;
 					}
 					else{
 						motor[claw]=-127;
+						clawOpen = true;
 					}
 				}
 				// Set button to pressed
