@@ -66,8 +66,6 @@ void setBaud( const TUARTs nPort, int baudRate ) {
 /*
 	Now we are back to code that I can explain.
 	The `main` task contains all of the code that is going to be run when the VEX Cortex is turned on.
-	It should also be noted that I refer to Squeaky by many names in this code including but not limited to Squishy, Stinky, and Sparky.
-	I apologize for any confusion but I still think it was funny.
 */
 
 task main(){
