@@ -1,7 +1,6 @@
 #pragma config(Sensor, dgtl1,  leftSensor,     sensorDigitalIn)
 #pragma config(Sensor, dgtl2,  rightSensor,    sensorDigitalIn)
 #pragma config(Sensor, dgtl3,  stopSensor,     sensorDigitalIn)
-#pragma config(Sensor, dgtl7,  ,               sensorDigitalIn)
 #pragma config(Motor,  port2,           motorLeft,     tmotorServoContinuousRotation, openLoop)
 #pragma config(Motor,  port4,           sizeChange,    tmotorServoStandard, openLoop)
 #pragma config(Motor,  port5,           autobox,       tmotorServoContinuousRotation, openLoop)
