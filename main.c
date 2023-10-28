@@ -33,6 +33,7 @@ task main(){
 	bool lastpress8D = false;
 	bool lastpress8R = false;
 	bool lastpress7L = false;
+	bool lastpress7U = false;
 	bool clawOpen = true;
 	bool scooperLowered = true;
 	float speedModifier = 1.0;
@@ -105,10 +106,10 @@ task main(){
 
 			// Forklift controls
 			if(vexRT[Btn6U]){
-				motor[forkliftMotor]=127;
+				motor[forkliftMotor]=127 * speedModifier;
 			}
 			else if(vexRT[Btn6D]){
-				motor[forkliftMotor]=-127;
+				motor[forkliftMotor]=-127 * speedModifier;
 
 			}
 			else{
@@ -172,7 +173,7 @@ task main(){
 
 		}
 
-		if(vexRT[Btn8L]){
+		if(vexRT[Btn7L]){
 			if (!lastpress7L){
 				if (speedModifier == 1.0){
 					speedModifier = 0.5;
@@ -187,4 +188,6 @@ task main(){
 			lastpress7L = false;
 		}
 	}
+
+
 }
