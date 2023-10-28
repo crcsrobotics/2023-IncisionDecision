@@ -39,6 +39,8 @@ task main(){
 	bool scooperLowered = true;
 	float speedModifier = 1.0;
 	int directionModifier = 1;
+	int limitForklift = 0;
+	int limitAutobox = 0;
 
 	string intAsString = "";
 	int intToConvert = 0;
@@ -108,9 +110,13 @@ task main(){
 			// Forklift controls
 			if(vexRT[Btn6U]){
 				motor[forkliftMotor]=127;
+				limitForklift += 1;
+				wait1Msec(10);
 			}
 			else if(vexRT[Btn6D]){
 				motor[forkliftMotor]=-127;
+			  limitForklift -= 1;
+				wait1Msec(10);
 
 			}
 			else{
@@ -120,9 +126,13 @@ task main(){
 			// Move autobox platform
 			if(vexRT[Btn5U]){
 				motor[autobox]=127;
+				limitAutobox += 1;
+				wait1Msec(10);
 			}
 			else if(vexRT[Btn5D]){
 				motor[autobox]=-127;
+				limitAutobox -= 1;
+				wait1Msec(10);
 			}
 			else{
 				motor[autobox]=0;
