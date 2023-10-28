@@ -1,7 +1,7 @@
 #pragma config(Sensor, dgtl1,  stopSensor,     sensorDigitalIn)
 #pragma config(Sensor, dgtl3,  leftSensor,     sensorDigitalIn)
 #pragma config(Sensor, dgtl4,  rightSensor,    sensorDigitalIn)
-#pragma config(Motor,  port2,           motorLeft,     tmotorServoContinuousRotation, openLoop)
+#pragma config(Motor,  port2,           motorLeft,     tmotorServoContinuousRotation, openLoop, reversed)
 #pragma config(Motor,  port4,           sizeChange,    tmotorServoStandard, openLoop)
 #pragma config(Motor,  port5,           autobox,       tmotorServoContinuousRotation, openLoop)
 #pragma config(Motor,  port6,           forkliftMotor, tmotorServoContinuousRotation, openLoop)
@@ -22,8 +22,9 @@ Btn5D - Autobox down
 Btn8D - Open/Close Claw
 Btn8L - Extend to full size (Exit compliance size)
 Btn8R - Lift/lower scooper
-Btn7R - Start autonomous brain biopsy
-Btn7L - Cancel autonomous brain biopsy
+Btn7R - Start/cancel autonomous brain biopsy
+Btn7L - Slow Mode
+
 
 */
 
@@ -31,8 +32,11 @@ task main(){
 	bool autonomous = false;
 	bool lastpress8D = false;
 	bool lastpress8R = false;
+	bool lastpress7L = false;
 	bool clawOpen = true;
 	bool scooperLowered = true;
+	float speedModifier = 1.0;
+	int directionModifier = 1;
 
 	string intAsString = "";
 	int intToConvert = 0;
@@ -55,7 +59,7 @@ task main(){
 		writeDebugStreamLine(intAsString);
 
 		if (autonomous){
-			if(vexRT[Btn7L]){
+			if(vexRT[Btn7R]){
 				// Cancel autonomous
 				autonomous = false;
 			}
@@ -85,6 +89,9 @@ task main(){
 		// Manual Controls
 		else{
 			if(vexRT[Btn7R]){
+				while (vexRT[Btn7R]){
+					wait1Msec(10);
+				}
 				autonomous = true;
 			}
 			// Expand to full size
@@ -163,6 +170,21 @@ task main(){
 				lastpress8R=false;
 			}
 
+		}
+
+		if(vexRT[Btn8L]){
+			if (!lastpress7L){
+				if (speedModifier == 1.0){
+					speedModifier = 0.5;
+				}
+				else{
+					speedModifier = 1.0;
+				}
+			}
+			lastpress7L = true;
+		}
+		else {
+			lastpress7L = false;
 		}
 	}
 }
