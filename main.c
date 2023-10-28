@@ -24,6 +24,7 @@ Btn8L - Extend to full size (Exit compliance size)
 Btn8R - Lift/lower scooper
 Btn7R - Start/cancel autonomous brain biopsy
 Btn7L - Slow Mode
+Btn7U - Reverse Mode
 
 
 */
@@ -101,15 +102,15 @@ task main(){
 			}
 
 			// Drive motor controls
-			motor[motorLeft]=vexRT[Ch3];
-			motor[motorRight]=vexRT[Ch2];
+			motor[motorLeft]=vexRT[Ch3] * speedModifier * directionModifier;
+			motor[motorRight]=vexRT[Ch2] * speedModifier * directionModifier;
 
 			// Forklift controls
 			if(vexRT[Btn6U]){
-				motor[forkliftMotor]=127 * speedModifier;
+				motor[forkliftMotor]=127;
 			}
 			else if(vexRT[Btn6D]){
-				motor[forkliftMotor]=-127 * speedModifier;
+				motor[forkliftMotor]=-127;
 
 			}
 			else{
@@ -186,6 +187,21 @@ task main(){
 		}
 		else {
 			lastpress7L = false;
+		}
+
+		if(vexRT[Btn7U]){
+			if (!lastpress7U){
+				if (directionModifier == 1){
+					directionModifier = -1;
+				}
+				else{
+					directionModifier = 1;
+				}
+			}
+			lastpress7U = true;
+		}
+		else {
+			lastpress7U = false;
 		}
 	}
 
