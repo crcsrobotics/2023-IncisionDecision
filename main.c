@@ -2,7 +2,7 @@
 #pragma config(Sensor, dgtl3,  leftSensor,     sensorDigitalIn)
 #pragma config(Sensor, dgtl4,  rightSensor,    sensorDigitalIn)
 #pragma config(Motor,  port2,           motorLeft,     tmotorServoContinuousRotation, openLoop, reversed)
-#pragma config(Motor,  port4,           sizeChange,    tmotorServoStandard, openLoop)
+#pragma config(Motor,  port4,           sizeChange,    tmotorServoStandard, openLoop, reversed)
 #pragma config(Motor,  port5,           autobox,       tmotorServoContinuousRotation, openLoop)
 #pragma config(Motor,  port6,           forkliftMotor, tmotorServoContinuousRotation, openLoop)
 #pragma config(Motor,  port7,           claw,          tmotorServoStandard, openLoop)
@@ -36,6 +36,7 @@ bool lastpress7L = false;
 bool lastpress7U = false;
 bool clawOpen = true;
 bool scooperLowered = true;
+bool floorTooDark = true;
 float speedModifier = 1.0;
 int directionModifier = 1;
 int limitForklift = 0;
@@ -67,27 +68,44 @@ task main(){
 				// Cancel autonomous
 				autonomous = false;
 			}
+			if (floorTooDark){
+				if (SensorValue[leftSensor] == 1){
+					motor[motorLeft] = 50;
+				}
+				else {
+					motor[motorLeft] = -50;
+				}
 
-			// Drive when the left motor sees the floor
-			if (SensorValue[leftSensor] == 0){
-				motor[motorLeft] = 64;
+				// Drive when the right motor sees the floor
+				if (SensorValue[rightSensor] == 1){
+					motor[motorRight] = 50;
+				}
+				else {
+					motor[motorRight] = -50;
+				}
 			}
-			else {
-				motor[motorLeft] = 0;
-			}
+			else{
+				// Drive when the left motor sees the floor
+				if (SensorValue[leftSensor] == 0){
+					motor[motorLeft] = 50;
+				}
+				else {
+					motor[motorLeft] = -50;
+				}
 
-			// Drive when the right motor sees the floor
-			if (SensorValue[rightSensor] == 0){
-				motor[motorRight] = 64;
-			}
-			else {
-				motor[motorRight] = 0;
+				// Drive when the right motor sees the floor
+				if (SensorValue[rightSensor] == 0){
+					motor[motorRight] = 50;
+				}
+				else {
+					motor[motorRight] = -50;
+				}
 			}
 
 			// Stop sensor
-			if (SensorValue[stopSensor] == 0){
+			/*if (SensorValue[stopSensor] == 0){
 				autonomous = false;
-			}
+			}*/
 
 		}
 		// Manual Controls
