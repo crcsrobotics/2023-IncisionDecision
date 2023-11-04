@@ -29,19 +29,19 @@ Btn7U - Reverse Mode
 
 */
 
-task main(){
-	bool autonomous = false;
-	bool lastpress8D = false;
-	bool lastpress8R = false;
-	bool lastpress7L = false;
-	bool lastpress7U = false;
-	bool clawOpen = true;
-	bool scooperLowered = true;
-	float speedModifier = 1.0;
-	int directionModifier = 1;
-	int limitForklift = 0;
-	int limitAutobox = 0;
+bool autonomous = false;
+bool lastpress8D = false;
+bool lastpress8R = false;
+bool lastpress7L = false;
+bool lastpress7U = false;
+bool clawOpen = true;
+bool scooperLowered = true;
+float speedModifier = 1.0;
+int directionModifier = 1;
+int limitForklift = 0;
+int limitAutobox = 0;
 
+task main(){
 	string intAsString = "";
 	int intToConvert = 0;
 
@@ -52,7 +52,7 @@ task main(){
 	while (true){
 
 		// If value is 0 IR is detected
-		intToConvert = SensorValue[leftSensor];
+		/* intToConvert = SensorValue[leftSensor];
 		sprintf(intAsString, "%d", intToConvert);
 		writeDebugStream("Left: ");
 		writeDebugStreamLine(intAsString);
@@ -60,10 +60,10 @@ task main(){
 		intToConvert = SensorValue[rightSensor];
 		sprintf(intAsString, "%d", intToConvert);
 		writeDebugStream("Right: ");
-		writeDebugStreamLine(intAsString);
+		writeDebugStreamLine(intAsString);*/
 
 		if (autonomous){
-			if(vexRT[Btn7R]){
+			if(vexRT[Btn7L]){
 				// Cancel autonomous
 				autonomous = false;
 			}
@@ -96,6 +96,7 @@ task main(){
 				while (vexRT[Btn7R]){
 					wait1Msec(10);
 				}
+				writeDebugStream("Autonomous");
 				autonomous = true;
 			}
 			// Expand to full size
@@ -115,7 +116,7 @@ task main(){
 			}
 			else if(vexRT[Btn6D]){
 				motor[forkliftMotor]=-127;
-			  limitForklift -= 1;
+				limitForklift -= 1;
 				wait1Msec(10);
 
 			}
