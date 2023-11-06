@@ -50,6 +50,10 @@ bool floorTooDark = true;
 float speedModifier = 1.0;
 int directionModifier = 1;
 
+// Adjusted Joystick Values (after modifiers and deadzone)
+int Ch2Adjusted = 0;
+int Ch3Adjusted = 0;
+
 // Not implemented yet - Could be used for software limits.
 // Testing so far has found them to be unreliable, however.
 int limitForklift = 0;
@@ -110,7 +114,7 @@ task main(){
 
 			// Stop sensor (no longer implemented)
 			/*if (SensorValue[stopSensor] == 0){
-				autonomous = false;
+			autonomous = false;
 			}*/
 
 		}
@@ -126,16 +130,32 @@ task main(){
 				motor[sizeChange]=-127;
 			}
 
+
+			// Add controller deadzone to prevent controller drift issues and apply speed and direction modifiers.
+			if (vexRT[Ch2] > 15 || vexRT[Ch2] < -15){
+				Ch2Adjusted = vexRT[Ch2] * speedModifier * directionModifier;
+			}
+			else{
+				Ch2Adjusted = 0;
+			}
+
+			if (vexRT[Ch3] > 15 || vexRT[Ch3] < -15){
+				Ch3Adjusted = vexRT[Ch3] * speedModifier * directionModifier;
+			}
+			else{
+				Ch3Adjusted = 0;
+			}
+
 			// Drive motor controls with modifiers applied
 			if (directionModifier > 0){
 				// Regular direction controls
-				motor[motorLeft]=vexRT[Ch3] * speedModifier * directionModifier;
-				motor[motorRight]=vexRT[Ch2] * speedModifier * directionModifier;
+				motor[motorLeft]=Ch3Adjusted;
+				motor[motorRight]=Ch2Adjusted;
 			}
 			else{
 				// Reverse direction controls (joysticks flipped)
-				motor[motorLeft]=vexRT[Ch2] * speedModifier * directionModifier;
-				motor[motorRight]=vexRT[Ch3] * speedModifier * directionModifier;
+				motor[motorLeft]=Ch2Adjusted;
+				motor[motorRight]=Ch3Adjusted;
 			}
 
 			// Forklift controls
