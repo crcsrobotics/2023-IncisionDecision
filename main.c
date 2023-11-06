@@ -29,46 +29,51 @@ Btn7U - Reverse Mode
 
 */
 
+// Variables are defined outside of the main task to make them global.
+// When variables are global, they can be viewed in the robot debug tools.
+// Debugger tools can be found under the "Robot" menu when the robot is connected.
+
 bool autonomous = false;
+
+// These variables are used to create toggle buttons.
 bool lastpress8D = false;
 bool lastpress8R = false;
 bool lastpress7L = false;
 bool lastpress7U = false;
 bool clawOpen = true;
 bool scooperLowered = true;
+
+// Set to true if the floor is too dark to reflect the IR sensors.
 bool floorTooDark = true;
+
+// Modifiers used for slow mode and reverse mode
 float speedModifier = 1.0;
 int directionModifier = 1;
+
+// Not implemented yet - Could be used for software limits.
+// Testing so far has found them to be unreliable, however.
 int limitForklift = 0;
 int limitAutobox = 0;
 
 task main(){
-	string intAsString = "";
-	int intToConvert = 0;
-
 
 	// Move servo to fit in competition dimensions
 	motor[sizeChange]=127;
 
 	while (true){
 
-		// If value is 0 IR is detected
-		/* intToConvert = SensorValue[leftSensor];
-		sprintf(intAsString, "%d", intToConvert);
-		writeDebugStream("Left: ");
-		writeDebugStreamLine(intAsString);
-
-		intToConvert = SensorValue[rightSensor];
-		sprintf(intAsString, "%d", intToConvert);
-		writeDebugStream("Right: ");
-		writeDebugStreamLine(intAsString);*/
-
+		// Autonomous brain biopsy code
 		if (autonomous){
+
 			if(vexRT[Btn7L]){
 				// Cancel autonomous
 				autonomous = false;
 			}
+
+			// Backup code for if the floor is too dark to reflect IR.
 			if (floorTooDark){
+				// Motors drive forward unless they see the white line, in which case they reverse to correct their direction.
+
 				if (SensorValue[leftSensor] == 1){
 					motor[motorLeft] = 50;
 				}
@@ -76,7 +81,6 @@ task main(){
 					motor[motorLeft] = -50;
 				}
 
-				// Drive when the right motor sees the floor
 				if (SensorValue[rightSensor] == 1){
 					motor[motorRight] = 50;
 				}
@@ -84,8 +88,11 @@ task main(){
 					motor[motorRight] = -50;
 				}
 			}
+
+			// Code for when the floor is light enough to reflect IR.
 			else{
-				// Drive when the left motor sees the floor
+				// Motors drive forward unless they see a black line, in which case they reverse to correct their direction.
+
 				if (SensorValue[leftSensor] == 0){
 					motor[motorLeft] = 50;
 				}
@@ -93,7 +100,6 @@ task main(){
 					motor[motorLeft] = -50;
 				}
 
-				// Drive when the right motor sees the floor
 				if (SensorValue[rightSensor] == 0){
 					motor[motorRight] = 50;
 				}
@@ -102,7 +108,7 @@ task main(){
 				}
 			}
 
-			// Stop sensor
+			// Stop sensor (no longer implemented)
 			/*if (SensorValue[stopSensor] == 0){
 				autonomous = false;
 			}*/
@@ -110,11 +116,9 @@ task main(){
 		}
 		// Manual Controls
 		else{
+
+			// Start autonomous task
 			if(vexRT[Btn7R]){
-				while (vexRT[Btn7R]){
-					wait1Msec(10);
-				}
-				writeDebugStream("Autonomous");
 				autonomous = true;
 			}
 			// Expand to full size
@@ -157,6 +161,7 @@ task main(){
 				motor[autobox]=0;
 			}
 
+			// Toggle button code
 			if(vexRT[Btn8D]){
 				// Check if button is already being pressed
 				if(lastpress8D==false){
@@ -203,6 +208,7 @@ task main(){
 
 		}
 
+		// Toogle the speed mode (regular or slow)
 		if(vexRT[Btn7L]){
 			if (!lastpress7L){
 				if (speedModifier == 1.0){
@@ -218,6 +224,7 @@ task main(){
 			lastpress7L = false;
 		}
 
+		// Toggle the robot direction (forward or reverse)
 		if(vexRT[Btn7U]){
 			if (!lastpress7U){
 				if (directionModifier == 1){
