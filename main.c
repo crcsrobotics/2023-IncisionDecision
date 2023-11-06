@@ -126,9 +126,17 @@ task main(){
 				motor[sizeChange]=-127;
 			}
 
-			// Drive motor controls
-			motor[motorLeft]=vexRT[Ch3] * speedModifier * directionModifier;
-			motor[motorRight]=vexRT[Ch2] * speedModifier * directionModifier;
+			// Drive motor controls with modifiers applied
+			if (directionModifier > 0){
+				// Regular direction controls
+				motor[motorLeft]=vexRT[Ch3] * speedModifier * directionModifier;
+				motor[motorRight]=vexRT[Ch2] * speedModifier * directionModifier;
+			}
+			else{
+				// Reverse direction controls (joysticks flipped)
+				motor[motorLeft]=vexRT[Ch2] * speedModifier * directionModifier;
+				motor[motorRight]=vexRT[Ch3] * speedModifier * directionModifier;
+			}
 
 			// Forklift controls
 			if(vexRT[Btn6U]){
