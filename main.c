@@ -128,12 +128,12 @@ task main(){
 
 			// Forklift controls
 			if(vexRT[Btn6U]){
-				motor[forkliftMotor]=127;
+				motor[forkliftMotor]=64;
 				limitForklift += 1;
 				wait1Msec(10);
 			}
 			else if(vexRT[Btn6D]){
-				motor[forkliftMotor]=-127;
+				motor[forkliftMotor]=-64;
 				limitForklift -= 1;
 				wait1Msec(10);
 
