@@ -2,7 +2,8 @@
 #pragma config(Sensor, dgtl3,  leftSensor,     sensorDigitalIn)
 #pragma config(Sensor, dgtl4,  rightSensor,    sensorDigitalIn)
 #pragma config(Motor,  port2,           motorLeft,     tmotorServoContinuousRotation, openLoop, reversed)
-#pragma config(Motor,  port4,           sizeChange,    tmotorServoStandard, openLoop, reversed)
+#pragma config(Motor,  port3,           rake,          tmotorServoStandard, openLoop, reversed)
+#pragma config(Motor,  port4,           sizeChange,    tmotorServoStandard, openLoop)
 #pragma config(Motor,  port5,           autobox,       tmotorServoContinuousRotation, openLoop)
 #pragma config(Motor,  port6,           forkliftMotor, tmotorServoContinuousRotation, openLoop)
 #pragma config(Motor,  port7,           claw,          tmotorServoStandard, openLoop)
@@ -25,6 +26,7 @@ Btn8R - Lift/lower scooper
 Btn7R - Start/cancel autonomous brain biopsy
 Btn7L - Slow Mode
 Btn7U - Reverse Mode
+Btn7D - Toggle Rake
 
 
 */
@@ -40,8 +42,12 @@ bool lastpress8D = false;
 bool lastpress8R = false;
 bool lastpress7L = false;
 bool lastpress7U = false;
+bool lastpress7D = false;
+bool lastpress8L = false;
 bool clawOpen = true;
 bool scooperLowered = true;
+bool rakeUp = false;
+bool sizeLowered = false;
 
 // Set to true if the floor is too dark to reflect the IR sensors.
 bool floorTooDark = true;
@@ -124,10 +130,6 @@ task main(){
 			// Start autonomous task
 			if(vexRT[Btn7R]){
 				autonomous = true;
-			}
-			// Expand to full size
-			if(vexRT[Btn8L]){
-				motor[sizeChange]=-127;
 			}
 
 
@@ -267,7 +269,40 @@ task main(){
 		else {
 			lastpress7U = false;
 		}
+
+		// Toggle the robot direction (forward or reverse)
+		if(vexRT[Btn7D]){
+			if (!lastpress7D){
+				if (rakeUp){
+					motor[rake] = 127;
+					rakeUp = false;
+				}
+				else{
+					motor[rake] = -127;
+					rakeUp = true;
+				}
+			}
+			lastpress7D = true;
+		}
+		else {
+			lastpress7D = false;
+		}
+
+		if(vexRT[Btn8L]){
+			if (!lastpress8L){
+				if (sizeLowered){
+					motor[sizeChange] = 127;
+					sizeLowered = false;
+				}
+				else{
+					motor[sizeChange] = -127;
+					sizeLowered = true;
+				}
+			}
+			lastpress8L = true;
+		}
+		else {
+			lastpress8L = false;
+		}
 	}
-
-
 }
