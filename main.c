@@ -2,7 +2,7 @@
 #pragma config(Sensor, dgtl3,  leftSensor,     sensorDigitalIn)
 #pragma config(Sensor, dgtl4,  rightSensor,    sensorDigitalIn)
 #pragma config(Motor,  port2,           motorLeft,     tmotorServoContinuousRotation, openLoop, reversed)
-#pragma config(Motor,  port3,           rake,          tmotorServoStandard, openLoop, reversed)
+#pragma config(Motor,  port3,           rake,          tmotorServoStandard, openLoop)
 #pragma config(Motor,  port4,           sizeChange,    tmotorServoStandard, openLoop)
 #pragma config(Motor,  port5,           autobox,       tmotorServoContinuousRotation, openLoop)
 #pragma config(Motor,  port6,           forkliftMotor, tmotorServoContinuousRotation, openLoop)
@@ -68,7 +68,8 @@ int limitAutobox = 0;
 task main(){
 
 	// Move servo to fit in competition dimensions
-	motor[sizeChange]=127;
+	motor[sizeChange]=-127;
+	motor[claw]=127;
 
 	while (true){
 
@@ -85,17 +86,17 @@ task main(){
 				// Motors drive forward unless they see the white line, in which case they reverse to correct their direction.
 
 				if (SensorValue[leftSensor] == 1){
-					motor[motorLeft] = 50;
+					motor[motorLeft] = 40;
 				}
 				else {
-					motor[motorLeft] = -50;
+					motor[motorLeft] = -110;
 				}
 
 				if (SensorValue[rightSensor] == 1){
-					motor[motorRight] = 50;
+					motor[motorRight] = 40;
 				}
 				else {
-					motor[motorRight] = -50;
+					motor[motorRight] = -110;
 				}
 			}
 
