@@ -55,7 +55,7 @@ bool sizeLowered = false;
 
 // Current finger position and list of position values
 int fingerPosition = 0;
-int fingerPositions[] = {-127, -64, 64, 127};
+int fingerPositions[] = {-127, 15, 64};
 
 
 // Set to true if the floor is too dark to reflect the IR sensors.
@@ -83,6 +83,7 @@ task main(){
 
 	// Move servo to fit in competition dimensions
 	motor[sizeChange]=-127;
+	motor[finger]=-127;
 
 	while (true){
 
@@ -286,13 +287,13 @@ task main(){
 
 		if(vexRT[Btn8R]){
 			if (!lastpress8R){
-				if (fingerPosition < 3){
+				if (fingerPosition < 2){
 					fingerPosition += 1;
 				}
 				else{
 					fingerPosition = 0;
 				}
-				motor[finger] = fingerPosition[fingerPositions];
+				motor[finger] = fingerPositions[fingerPosition];
 			}
 			lastpress8R = true;
 		}
