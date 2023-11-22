@@ -52,6 +52,12 @@ bool sizeLowered = false;
 // Set to true if the floor is too dark to reflect the IR sensors.
 bool floorTooDark = true;
 
+// Smooth driving enabled
+bool smoothDriving = false;
+float currentCh2speed = 0;
+float currentCh3speed = 0;
+
+
 // Modifiers used for slow mode and reverse mode
 float speedModifier = 1.0;
 int directionModifier = 1;
@@ -148,17 +154,43 @@ task main(){
 			else{
 				Ch3Adjusted = 0;
 			}
-
-			// Drive motor controls with modifiers applied
-			if (directionModifier > 0){
-				// Regular direction controls
-				motor[motorLeft]=Ch3Adjusted;
-				motor[motorRight]=Ch2Adjusted;
+			if (smoothDriving){
+				// Instead of directly changing the speed, move values towards the target speed.
+				if (currentCh2speed > Ch2Adjusted){
+					currentCh2speed -= 0.04;
+				}
+				if (currentCh2speed < Ch2Adjusted){
+					currentCh2speed += 0.04;
+				}
+				if (currentCh3speed > Ch3Adjusted){
+					currentCh3speed -= 0.04;
+				}
+				if (currentCh3speed < Ch3Adjusted){
+					currentCh3speed += 0.04;
+				}
+				if (directionModifier > 0){
+					// Regular direction controls
+					motor[motorLeft]=currentCh3speed;
+					motor[motorRight]=currentCh2speed;
+				}
+				else{
+					// Reverse direction controls (joysticks flipped)
+					motor[motorLeft]=currentCh2speed;
+					motor[motorRight]=currentCh3speed;
+				}
 			}
-			else{
-				// Reverse direction controls (joysticks flipped)
-				motor[motorLeft]=Ch2Adjusted;
-				motor[motorRight]=Ch3Adjusted;
+			else {
+				// Drive motor controls with modifiers applied
+				if (directionModifier > 0){
+					// Regular direction controls
+					motor[motorLeft]=Ch3Adjusted;
+					motor[motorRight]=Ch2Adjusted;
+				}
+				else{
+					// Reverse direction controls (joysticks flipped)
+					motor[motorLeft]=Ch2Adjusted;
+					motor[motorRight]=Ch3Adjusted;
+				}
 			}
 
 			// Forklift controls
