@@ -12,16 +12,27 @@
 /*
 Control List
 
+DRIVE CONTROLS
+-------------------
 Ch3 - Left motor
 Ch2 - Right motor
+
+VERTICAL CONTROLS
+-------------------
 Btn5U - Autobox up*
 Btn5D - Autobox down*
+
+PART CONTROLS
+-------------------
 Btn8L - Extend to full size (Exit compliance size)
+Btn8D - Toggle Rake
+Btn8R - Toggle Finger Positions
+
+MODE CONTROLS
+-------------------
 Btn7R - Start/cancel autonomous brain biopsy
 Btn7L - Slow Mode
 Btn7U - Reverse Mode
-Btn8D - Toggle Rake
-Btn8R - Toggle Finger Positions
 
 *may need to be updated
 
@@ -36,7 +47,7 @@ bool autonomous = false;
 // These variables are used to create toggle buttons.
 bool lastpress7L = false;
 bool lastpress7U = false;
-bool lastpress7D = false;
+bool lastpress8D = false;
 bool lastpress8L = false;
 bool rakeUp = false;
 bool sizeLowered = false;
@@ -233,8 +244,8 @@ task main(){
 		}
 
 		// Toggle the robot direction (forward or reverse)
-		if(vexRT[Btn7D]){
-			if (!lastpress7D){
+		if(vexRT[Btn8D]){
+			if (!lastpress8D){
 				if (rakeUp){
 					motor[rake] = 127;
 					rakeUp = false;
@@ -244,10 +255,10 @@ task main(){
 					rakeUp = true;
 				}
 			}
-			lastpress7D = true;
+			lastpress8D = true;
 		}
 		else {
-			lastpress7D = false;
+			lastpress8D = false;
 		}
 
 		if(vexRT[Btn8L]){
