@@ -30,7 +30,8 @@ Btn8R - Toggle Finger Positions
 
 MODE CONTROLS
 -------------------
-Btn7R - Start/cancel autonomous brain biopsy
+Btn7R - Start autonomous brain biopsy
+Btn7D - Cancel autonomous brain biopsy
 Btn7L - Slow Mode
 Btn7U - Reverse Mode
 
@@ -90,7 +91,7 @@ task main(){
 		// Autonomous brain biopsy code
 		if (autonomous){
 
-			if(vexRT[Btn7L]){
+			if(vexRT[Btn7D]){
 				// Cancel autonomous
 				autonomous = false;
 			}
