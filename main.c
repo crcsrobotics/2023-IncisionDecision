@@ -49,8 +49,14 @@ bool lastpress7L = false;
 bool lastpress7U = false;
 bool lastpress8D = false;
 bool lastpress8L = false;
+bool lastpress8R = false;
 bool rakeUp = false;
 bool sizeLowered = false;
+
+// Current finger position and list of position values
+int fingerPosition = 0;
+int fingerPositions[] = {-127, -64, 64, 127};
+
 
 // Set to true if the floor is too dark to reflect the IR sensors.
 bool floorTooDark = true;
@@ -276,6 +282,22 @@ task main(){
 		}
 		else {
 			lastpress8L = false;
+		}
+
+		if(vexRT[Btn8R]){
+			if (!lastpress8R){
+				if (fingerPosition < 3){
+					fingerPosition += 1;
+				}
+				else{
+					fingerPosition = 0;
+				}
+				motor[finger] = fingerPosition[fingerPositions];
+			}
+			lastpress8R = true;
+		}
+		else {
+			lastpress8R = false;
 		}
 	}
 }
