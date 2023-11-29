@@ -1,9 +1,11 @@
 #pragma config(Sensor, dgtl1,  stopSensor,     sensorDigitalIn)
 #pragma config(Sensor, dgtl3,  leftSensor,     sensorDigitalIn)
 #pragma config(Sensor, dgtl4,  rightSensor,    sensorDigitalIn)
+#pragma config(Sensor, dgtl6,  upperLimitSensor, sensorDigitalIn)
+#pragma config(Sensor, dgtl7,  lowerLimitSensor, sensorDigitalIn)
 #pragma config(Motor,  port2,           motorLeft,     tmotorServoContinuousRotation, openLoop, reversed)
 #pragma config(Motor,  port3,           rake,          tmotorServoStandard, openLoop)
-#pragma config(Motor,  port4,           autobox,       tmotorServoContinuousRotation, openLoop)
+#pragma config(Motor,  port4,           autobox,       tmotorServoContinuousRotation, openLoop, reversed)
 #pragma config(Motor,  port7,           finger,        tmotorServoStandard, openLoop)
 #pragma config(Motor,  port8,           sizeChange,    tmotorServoStandard, openLoop)
 #pragma config(Motor,  port9,           motorRight,    tmotorServoContinuousRotation, openLoop)
@@ -27,6 +29,7 @@ PART CONTROLS
 Btn8L - Extend to full size (Exit compliance size)
 Btn8D - Toggle Rake
 Btn8R - Toggle Finger Positions
+Btn8U - Autobox Calibrate
 
 MODE CONTROLS
 -------------------
@@ -80,6 +83,11 @@ int Ch3Adjusted = 0;
 // Testing so far has found them to be unreliable, however.
 int limitAutobox = 0;
 
+int autoboxPosition = 0;
+int autoboxMaxPosition = 0;
+int autoboxMidPoint = 0;
+
+
 task main(){
 
 	// Move servo to fit in competition dimensions
@@ -87,6 +95,19 @@ task main(){
 	motor[finger]=-127;
 
 	while (true){
+		if (vexRT[Btn8U]){
+			// Calibration
+			while (SensorValue[upperLimitSensor] == 0){
+				motor[autobox]=50;
+			}
+			autoboxPosition = 0;
+			while (SensorValue[lowerLimitSensor] == 0){
+				autoboxMaxPosition += 1;
+				motor[autobox]=-50;
+				wait1Msec(50);
+			}
+			autoboxMidPoint = autoboxMaxPosition/2;
+		}
 
 		// Autonomous brain biopsy code
 		if (autonomous){
@@ -204,14 +225,14 @@ task main(){
 
 			// Move autobox platform
 			if(vexRT[Btn5U]){
-				motor[autobox]=127;
-				limitAutobox += 1;
-				wait1Msec(10);
+				motor[autobox]=50;
+				autoboxPosition += 1;
+				wait1Msec(50);
 			}
 			else if(vexRT[Btn5D]){
-				motor[autobox]=-127;
-				limitAutobox -= 1;
-				wait1Msec(10);
+				motor[autobox]=-50;
+				autoboxPosition -= 1;
+				wait1Msec(50);
 			}
 			else{
 				motor[autobox]=0;
