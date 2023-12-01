@@ -157,7 +157,7 @@ task main(){
 				autonomous = true;
 			}
 
-			if (vexRT[Btn8U]){
+			/* if (vexRT[Btn8U]){
 				if (!calibrated){
 					// Calibration
 					while (SensorValue[upperLimitSensor] == 0){
@@ -197,6 +197,7 @@ task main(){
 					centering=false;
 				}
 			}
+			*/
 
 
 			// Add controller deadzone to prevent controller drift issues and apply speed and direction modifiers.
